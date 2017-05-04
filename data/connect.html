@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- frameworks, stylesheets and metadata -->
+	<meta name="viewport" content="width=device-width, initial-scale=1" >
+	<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="jquery.mobile-1.4.5.min.css" />
+	<link type="text/css" rel="stylesheet" href="font-awesome.min.css" />
+	<!-- select.php connector -->
+	<script>
+		$(document).ready(function() {
+			$.getJSON("select.php", function(data) {
+				var tr=[];
+				for(var i = 0; i < data.length; i++) {
+					tr.push("<tr>");
+					tr.push("<td>"+data[i].UID+"</td>");
+					tr.push("<td>"+data[i].ID_TYPE+"</td>");
+					tr.push("<td>"+data[i].ID_NUMBER+"</td>");
+					tr.push("<td>"+data[i].NAME+"</td>");
+					tr.push("<td>"+data[i].GENDER+"</td>");
+					tr.push("<td>"+data[i].DOB+"</td>");
+					tr.push("<td>"+data[i].RELIGION+"</td>");
+					tr.push("<td>"+data[i].MOTHER_TONGUE+"</td>");
+					tr.push("<td>"+data[i].ADDRESS+"</td>");
+					tr.push("<td>"+data[i].PINCODE+"</td>");
+					tr.push("<td>"+data[i].TEN+" "+data[i].TWE+" "+data[i].UG+" "+data[i].PG+" "+data[i].DR+"</td>");
+					tr.push("<td>"+data[i].WORK_TYPE+"</td>");
+					tr.push("</tr>");
+				}
+				$('#tbodyhome').html($(tr.join('')));
+			});
+		});
+	</script>
+	<!-- count.php connector -->
+	<script>
+		$(document).ready(function() {
+			$.getJSON("count.php", function(data) {
+				var cnt=[];
+				for(var i=0; i< data.length; i++) {
+					cnt.push("<p>");
+					cnt.push(""+data[i].COUNT+" Records");
+					cnt.push("</p>");
+				}
+				$('#counthome').html($(cnt.join('')));
+			});
+		});
+	</script>
+	<!-- count_search.php connector -->
+	<script>
+		$(document).ready(function() {
+			$(document).on('input', '#find', function() {
+				$.ajax({
+					url: 'count_search.php',
+					data: {find: $('#find').val()},
+					type: 'post',
+					cache: 'false',
+					success: function(result) {
+						var data = $.parseJSON(result);
+						var cnt=[];
+						for(var i=0; i< data.length; i++) {
+							cnt.push("<p>");
+							cnt.push(""+data[i].COUNT+" Records");
+							cnt.push("</p>");
+						}
+						$('#counthome').html($(cnt.join('')));
+					}
+				});
+			});
+		});
+	</script>
+	<!-- search.php connector -->
+	<script>
+		$(document).ready(function() {
+			$(document).on('input', '#find', function() {		
+				$.ajax({
+					url: 'search.php',
+					data: {find: $('#find').val()},
+					type: 'post',
+					cache: 'false',	
+					success: function(result) {
+						var json_obj = $.parseJSON(result);
+						var tr=[];
+						for(var i = 0; i < json_obj.length; i++) {
+							tr.push("<tr>");
+							tr.push("<td>"+json_obj[i].UID+"</td>");
+							tr.push("<td>"+json_obj[i].ID_TYPE+"</td>");
+							tr.push("<td>"+json_obj[i].ID_NUMBER+"</td>");
+							tr.push("<td>"+json_obj[i].NAME+"</td>");
+							tr.push("<td>"+json_obj[i].GENDER+"</td>");
+							tr.push("<td>"+json_obj[i].DOB+"</td>");
+							tr.push("<td>"+json_obj[i].RELIGION+"</td>");
+							tr.push("<td>"+json_obj[i].MOTHER_TONGUE+"</td>");
+							tr.push("<td>"+json_obj[i].ADDRESS+"</td>");
+							tr.push("<td>"+json_obj[i].PINCODE+"</td>");
+							tr.push("<td>"+json_obj[i].TEN+" "+json_obj[i].TWE+" "+json_obj[i].UG+" "+json_obj[i].PG+" "+json_obj[i].DR+"</td>");
+							tr.push("<td>"+json_obj[i].WORK_TYPE+"</td>");
+							tr.push("</tr>");
+						}
+						$('#tbodyhome').html($(tr.join('')));
+					}		
+				});
+			});
+		});		
+	</script>
+	<!-- insert.php connector-->
+	<script>
+		var validateInsert = 1;
+		function removeOldInsertErrors() {
+			$('#idtypeinserterror').next('i').remove();
+			$('#idnuminserterror').next('i').remove();
+			$('#nameinserterror').next('i').remove();
+			$('#dobinserterror').next('i').remove();	
+			$('#religioninserterror').next('i').remove();
+			$('#langinserterror').next('i').remove();
+			$('#addressinserterror').next('i').remove();
+			$('#pincodeinserterror').next('i').remove();
+			$('#workinserterror').next('i').remove();
+			validateInsert = 1;
+		}
+		function validatorInsert() {
+			removeOldInsertErrors();
+			if($('#id_type_insert').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#idtypeinserterror');
+				validateInsert = 0;
+			}
+			if($('#id_num_insert').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#idnuminserterror');
+				validateInsert = 0;
+			}
+			if($('#name_insert').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#nameinserterror');
+				validateInsert = 0;
+			}
+			if($('#dob_insert').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#dobinserterror');
+				validateInsert = 0;
+			}
+			if($('#religion_insert').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#religioninserterror');
+				validateInsert = 0;
+			}
+			if($('#mother_tongue_insert').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#langinserterror');
+				validateInsert = 0;
+			}
+			if($('#address_insert').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#addressinserterror');
+				validateInsert = 0;
+			}
+			if($('#pincode_insert').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#pincodeinserterror');
+				validateInsert = 0;
+			}
+			if($('#work_insert').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#workinserterror');
+				validateInsert = 0;
+			}
+		}
+		$(document).ready(function(){
+			$(document).on('click','#insertbutton',function(){
+				validatorInsert();
+				if (validateInsert == 1) {
+					$.ajax({
+						url:'insert.php',
+						type: 'post',
+						cache: 'false',
+						data: { id_type: $('#id_type_insert').val(),
+							id_num: $('#id_num_insert').val(),
+							name: $('#name_insert').val(),
+							gender: $('input:radio[name=gender_insert]:checked').val(),
+							dob: $('#dob_insert').val(),
+							religion: $('#religion_insert').val(),
+							mother_tongue: $('#mother_tongue_insert').val(),
+							address: $('#address_insert').val(),
+							pincode: $('#pincode_insert').val(),
+							ten: $('#ten_insert').val(),
+							twe: $('#twe_insert').val(),
+							ug: $('#ug_insert').val(),
+							pg: $('#pg_insert').val(),
+							dr: $('#dr_insert').val(),
+							work: $('#work_insert').val()
+						},
+						success: function(resultInsert) {
+							if(resultInsert==0) { alert('Success'); window.location.href="connect.html"; }
+							else if(resultInsert==1) { alert('Error'); window.location.href="connect.html"; }
+						}
+					});
+				}
+			});
+		});
+	</script>
+	<!-- update.php connector -->
+	<script>
+		var validateUpdate = 1;
+		function removeOldUpdateError() {
+			$('#uidupdateerror').next('i').remove();
+			validateUpdate = 1;
+		}
+		function validatorUpdate() {
+			removeOldUpdateError();
+			if($('#uid_update').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#uidupdateerror');
+				validateUpdate = 0;
+			}
+		}
+		$(document).ready(function() {
+			$(document).on('click', '#updatebutton', function() {
+				validatorUpdate();
+				if(validateUpdate == 1) {
+					$.ajax({
+						url:'update.php',
+						type: 'post',
+						cache: 'false',
+						data: { uid: $('#uid_update').val(),
+							id_type: $('#id_type_update').val(),
+							id_num: $('#id_num_update').val(),
+							name: $('#name_update').val(),
+							gender: $('input:radio[name=gender_update]:checked').val(),
+							dob: $('#dob_update').val(),
+							religion: $('#religion_update').val(),
+							mother_tongue: $('#mother_tongue_update').val(),
+							address: $('#address_update').val(),
+							pincode: $('#pincode_update').val(),
+							ten: $('#ten_update').val(),
+							twe: $('#twe_update').val(),
+							ug: $('#ug_update').val(),
+							pg: $('#pg_update').val(),
+							dr: $('#dr_update').val(),
+							work: $('#work_update').val()
+						},
+						success: function(resultUpdate) {
+							if(resultUpdate==0) { alert('Success'); window.location.href="connect.html"; }
+							else if(resultUpdate==1) { alert('Error'); window.location.href="connect.html"; }
+						}
+					});
+				}
+			});
+		});
+	</script>
+	<!-- delete.php connector -->
+	<script>
+		var validateDelete = 1;
+		function removeOldDeleteError() {
+			$('#uiddeleteerror').next('i').remove();
+			validateDelete = 1;
+		}
+		function validatorDelete() {
+			removeOldDeleteError();
+			if($('#uid_delete').val() == '') {
+				$('<i class="fa fa-exclamation-circle" style="color:red;"></i>').insertAfter('#uiddeleteerror');
+				validateDelete = 0;
+			}
+		}
+		$(document).ready(function() {
+			$(document).on('click', '#deletebutton', function() {
+				validatorDelete();
+				if(validateDelete == 1) {
+					$.ajax({
+						url:'delete.php',
+						type: 'post',
+						cache: 'false',
+						data: { uid: $('#uid_delete').val()
+						},
+						success: function(resultDelete) {
+							if(resultDelete==0) { alert('Success'); window.location.href="connect.html"; }
+							else if(resultDelete==1) { alert('Error'); window.location.href="connect.html"; }
+						}
+					});
+				}
+			});
+		});
+	</script>
+	<!-- report.php connector -->
+	<script>
+		$(document).ready( function() {
+			$(document).on('click', '#reportbutton', function() {
+				var x1 = $('#idtablereport').val()==1?1:0;
+				var x2 = $('#detailtablereport').val()==1?1:0;
+				var x3 = $('#addresstablereport').val()==1?1:0;
+				var x4 = $('#educationtablereport').val()==1?1:0;
+				var x5 = $('#worktablereport').val()==1?1:0;				
+				$.ajax({
+					url:'report.php',
+					type: 'post',
+					cache: 'false',
+					data: { t1: $('#idtablereport').val(),
+						t2: $('#detailtablereport').val(),
+						t3: $('#addresstablereport').val(),
+						t4: $('#educationtablereport').val(),
+						t5: $('#worktablereport').val()
+					},
+					success: function(result) {
+						var th=[];
+						th.push("<tr>");
+						if(x1==1||x2==1||x3==1||x4==1||x5==1) {
+							th.push("<th>UID</th>");
+						}
+						if(x1==1) {
+							th.push("<th>ID_TYPE</th>");
+							th.push("<th>ID_NUMBER</th>");
+						}
+						if(x2==1) {
+							th.push("<th>NAME</th>");
+							th.push("<th>GENDER</th>");
+							th.push("<th>DOB</th>");
+							th.push("<th>RELIGION</th>");
+							th.push("<th>MOTHER_TONGUE</th>");
+						}
+						if(x3==1) {
+							th.push("<th>ADDRESS</th>");
+							th.push("<th>PINCODE</th>");
+						}
+						if(x4==1) {
+							th.push("<th>TEN</th>");
+							th.push("<th>TWE</th>");
+							th.push("<th>UG</th>");
+							th.push("<th>PG</th>");
+							th.push("<th>DR</th>");
+						}
+						if(x5==1) {
+							th.push("<th>WORK_TYPE</th>");
+						}
+						th.push("</tr");
+						$('#theadreport').html($(th.join('')));
+						var json_obj = $.parseJSON(result);
+						var tr=[];
+						for(var i = 0; i < json_obj.length; i++) {
+							tr.push("<tr>");
+							if(x1==1||x2==1||x3==1||x4==1||x5==1) {
+								tr.push("<td>"+json_obj[i].UID+"</td>");
+							}
+							if(x1==1) {
+								tr.push("<td>"+json_obj[i].ID_TYPE+"</td>");
+								tr.push("<td>"+json_obj[i].ID_NUMBER+"</td>");
+							}
+							if(x2==1) {
+								tr.push("<td>"+json_obj[i].NAME+"</td>");
+								tr.push("<td>"+json_obj[i].GENDER+"</td>");
+								tr.push("<td>"+json_obj[i].DOB+"</td>");
+								tr.push("<td>"+json_obj[i].RELIGION+"</td>");
+								tr.push("<td>"+json_obj[i].MOTHER_TONGUE+"</td>");
+							}
+							if(x3==1) {
+								tr.push("<td>"+json_obj[i].ADDRESS+"</td>");
+								tr.push("<td>"+json_obj[i].PINCODE+"</td>");
+							}
+							if(x4==1) {
+								tr.push("<td>"+json_obj[i].TEN+"</td>");
+								tr.push("<td>"+json_obj[i].TWE+"</td>");
+								tr.push("<td>"+json_obj[i].UG+"</td>");
+								tr.push("<td>"+json_obj[i].PG+"</td>");
+								tr.push("<td>"+json_obj[i].DR+"</td>");	
+							}
+							if(x5==1) {
+								tr.push("<td>"+json_obj[i].WORK_TYPE+"</td>");
+							}
+							tr.push("</tr>");
+						}
+						$('#tbodyreport').html($(tr.join('')));
+					}
+				});						
+			});
+		});
+	</script>
+</head>
+<body onLoad="document.getElementById('searchbar').reset();document.getElementById('insertform').reset();document.getElementById('updateform').reset();document.getElementById('deleteform').reset();document.getElementById('reportform').reset();">
+	<!-- home page -->
+	<div data-role="page" id="homepage">
+		<div data-role="header" data-position="fixed">
+			<a href="#helppage" data-role="button" data-icon="alert" data-mini="true" data-transition="pop">Help</a>
+			<h1>Population Database</h1>
+			<a href="#aboutpage" data-role="button" data-icon="info" data-iconpos="right" data-mini="true" data-transition="pop">About</a>
+		</div>
+		<div data-role="main" class="ui-content">
+			<div class="ui-field-contain">
+				<form id="searchbar">
+					<input type="search" name="find" id="find" data-mini="true" placeholder="Search....">
+				</form>
+			</div>
+			<h7 id="counthome" style="text-align: center;/*!  */font-weight: bold;"></h7>
+			<table data-role="table" class="ui-responsive">
+				<thead><tr>
+					<th>UID</th>
+					<th>ID TYPE</th>
+					<th>ID NUMBER</th>
+					<th>NAME</th>
+					<th>GENDER</th>
+					<th>DOB</th>
+					<th>RELIGION</th>
+					<th>MOTHER TONGUE</th>
+					<th>ADDRESS</th>
+					<th>PINCODE</th>
+					<th>EDUCATION</th>
+					<th>WORK</th>
+				</tr></thead>
+				<tbody id="tbodyhome"></tbody>				
+			</table>
+		</div>
+		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#insertpage" data-role="button" data-icon="plus" data-mini="true" data-iconpos="top" data-transition="flip">Insert</a></li>
+					<li><a href="#updatepage" data-role="button" data-icon="edit" data-mini="true" data-iconpos="top" data-transition="flip">Update</a></li>
+					<li><a href="#deletepage" data-role="button" data-icon="delete" data-mini="true" data-iconpos="top" data-transition="flip">Delete</a></li>
+					<li><a href="#reportpage" data-role="button" data-icon="grid" data-mini="true" data-iconpos="top" data-transition="flip">Report</a>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- about page -->
+	<div data-role="page" data-dialog="true" id="aboutpage">
+		<div data-role="header">
+			<h3>About</h3>
+		</div>
+		<div data-role="main" class="ui-content">
+			<p>Author: Mayank Metha D<br>
+			USN: 1MV14CS054</p>
+		</div>
+	</div>
+	<!-- help page -->
+	<div data-role="page" data-dialog="true" id="helppage">
+		<div data-role="header">
+			<h3>Help</h3>
+		</div>
+		<div data-role="main" class="ui-content">
+			<ul>
+				<li>UID is used to update and delete a record, so dont forget it.</li>
+				<li>While using search box, don't press enter key.</li>
+				<li>While updating record Gender radio button and Education checkbox could change the original value.Please enter its original value to avoid change of original value after update</li>
+				<li>The Education Column has 5 bits that stand for Tenth,+2,Undergraduate,Postgraduate,Doctrate respectively.If the value is 1 then that field is checked else if 0 that field is unchecked.</li>
+				<li>Required input boxed if left blank will have <i class="fa fa-exclamation-circle" style="color:red;"></i> symbol before the input field label on submit.</li>
+				<li>Any error that occurs during add, update or delete of record will have a generalized error message.</li>
+			</ul>
+		</div>
+	</div>
+	<!-- insert page -->
+	<div data-role="page" id="insertpage">
+		<div data-role="header">
+			<a href="#homepage" id="back" data-role="button" data-mini="true" data-icon="carat-l" data-transition="flip">Back</a>
+			<h2>Insert</h2>
+		</div>
+		<div data-role="main" class="ui-content">
+			<form id="insertform">
+				<div data-role="fieldcontain">
+					<label for="id_type_insert"><div id="idtypeinserterror"></div> Id Type</label>
+					<input type="text" data-mini="true" id="id_type_insert" name="id_type_insert">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="id_num_insert"><div id="idnuminserterror"></div> Id Number</label>
+					<input type="text" data-mini="true" id="id_num_insert" name="id_num_insert">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="name_insert"><div id="nameinserterror"></div> Name</label>
+					<input type="text" data-mini="true" id="name_insert" name="name_insert">
+				</div>
+				<div data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-mini="true" data-type="horizontal">
+						<legend> Gender</legend>
+						<input type="radio" id="male" name="gender_insert" value="Male" checked="check">
+						<label for="male">Male</label>
+						<input type="radio" id="female" name="gender_insert" value="Female">
+						<label for="female">Female</label>
+						<input type="radio" id="others" name="gender_insert" value="Others">
+						<label for="others">Others</label>
+					</fieldset>
+				</div>
+				<div data-role="fieldcontain">
+					<label for="dob_insert"><div id="dobinserterror"></div> Date Of Birth</label>
+					<input type="date" name="dob_insert" id="dob_insert" data-mini="true" placeholder="dd-mm-yyyy">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="religion_insert"><div id="religioninserterror"></div> Religion</label>
+					<input type="text" data-mini="true" id="religion_insert" name="religion_insert">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="mother_tongue_insert"><div id="langinserterror"></div> Mother Tongue</label>
+					<input type="text" data-mini="true" id="mother_tongue_insert" name="mother_tongue_insert">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="address_insert"><div id="addressinserterror"></div> Address</label>
+					<input type="text" data-mini="true" id="address_insert" name="address_insert">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="pincode_insert"><div id="pincodeinserterror"></div> Pincode</label>
+					<input type="text" data-mini="true" id="pincode_insert" name="pincode_insert">
+				</div>
+				<div data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-mini="true" data-type="horizontal">
+						<legend> Education</legend>
+						<input type="checkbox" id="ten_insert" name="ten_insert" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="ten_insert">Tenth</label>
+						<input type="checkbox" id="twe_insert" name="twe_insert" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="twe_insert">+2</label>
+						<input type="checkbox" id="ug_insert" name="ug_insert" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="ug_insert">Under Graduate</label>
+						<input type="checkbox" id="pg_insert" name="pg_insert" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="pg_insert">Post Graduate</label>
+						<input type="checkbox" id="dr_insert" name="dr_insert" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="dr_insert">Doctrate</label>
+					</fieldset>
+				</div>
+				<div data-role="fieldcontain">
+					<label for="work_insert"><div id="workinserterror"></div> Work Type</label>
+					<input type="text" data-mini="true" id="work_insert" name="work_insert">
+				</div>
+				<input type="button" id="insertbutton" name="insertbutton" value="Submit" data-mini="true" data-icon="check">
+			</form>
+		</div>
+	</div>
+	<!-- update page -->
+	<div data-role="page" id="updatepage">
+		<div data-role="header">
+			<a href="#homepage" id="back" data-role="button" data-icon="carat-l" data-mini="true" data-transition="flip">Back</a>
+			<h2>Update</h2>
+		</div>
+		<div data-role="main" class="ui-content">
+			<form id="updateform">
+				<div data-role="fieldcontain">
+					<label for="uid_update"><div id="uidupdateerror"></div> UID</label>
+					<input type="text" data-mini="true" id="uid_update" name="uid_update">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="id_type_update">Id Type</label>
+					<input type="text" data-mini="true" id="id_type_update" name="id_type_update">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="id_num_update">Id Number</label>
+					<input type="text" data-mini="true" id="id_num_update" name="id_num_update">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="name_update">Name</label>
+					<input type="text" data-mini="true" id="name_update" name="name_update">
+				</div>
+				<div data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-mini="true" data-type="horizontal">
+						<legend>Gender</legend>
+						<input type="radio" id="male" name="gender_update" value="Male" checked="check">
+						<label for="male">Male</label>
+						<input type="radio" id="female" name="gender_update" value="Female">
+						<label for="female">Female</label>
+						<input type="radio" id="others" name="gender_update" value="Others">
+						<label for="others">Others</label>
+					</fieldset>
+				</div>
+				<div data-role="fieldcontain">
+					<label for="dob_update">Date Of Birth</label>
+					<input type="date" name="dob_update" id="dob_update" data-mini="true" placeholder="dd-mm-yyyy">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="religion_update">Religion</label>
+					<input type="text" data-mini="true" id="religion_update" name="religion_update">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="mother_tongue_update">Mother Tongue</label>
+					<input type="text" data-mini="true" id="mother_tongue_update" name="mother_tongue_update">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="address_update">Address</label>
+					<input type="text" data-mini="true" id="address_update" name="address_update">
+				</div>
+				<div data-role="fieldcontain">
+					<label for="pincode_update">Pincode</label>
+					<input type="text" data-mini="true" id="pincode_update" name="pincode_update">
+				</div>
+				<div data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-mini="true" data-type="horizontal">
+						<legend>Education</legend>
+						<input type="checkbox" id="ten_update" name="ten_update" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="ten_update">Tenth</label>
+						<input type="checkbox" id="twe_update" name="twe_update" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="twe_update">+2</label>
+						<input type="checkbox" id="ug_update" name="ug_update" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="ug_update">Under Graduate</label>
+						<input type="checkbox" id="pg_update" name="pg_update" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="pg_update">Post Graduate</label>
+						<input type="checkbox" id="dr_update" name="dr_update" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="dr_update">Doctrate</label>
+					</fieldset>
+				</div>
+				<div data-role="fieldcontain">
+					<label for="work_update">Work Type</label>
+					<input type="text" data-mini="true" id="work_update" name="work_update">
+				</div>
+				<input type="button" id="updatebutton" name="updatebutton" value="Submit" data-mini="true" data-icon="check">
+			</form>
+		</div>
+	</div>
+	<!-- delete page -->
+	<div data-role="page" id="deletepage">
+		<div data-role="header">
+			<a href="#homepage" id="back" data-role="button" data-icon="carat-l" data-mini="true" data-transition="flip">Back</a>
+			<h2>Delete</h2>
+		</div>
+		<div data-role="main" class="ui-content">
+			<form id="deleteform">
+				<div data-role="fieldcontain">
+					<label for="uid_delete"><div id="uiddeleteerror"></div> UID</label>
+					<input type="text" data-mini="true" id="uid_delete" name="uid_delete">
+				</div>
+				<input type="button" id="deletebutton" name="deletebutton" value="Submit" data-mini="true" data-icon="check">
+			</form>
+		</div>
+	</div>
+	<!-- report page -->
+	<div data-role="page" id="reportpage">
+		<div data-role="header">
+			<a href="#homepage" id="back" data-role="button" data-icon="carat-l" data-mini="true" data-transition="flip">Back</a>
+			<h2>Report</h2>
+		</div>
+		<div data-role="main" class="ui-content">
+			<form id="reportform">
+				<div data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-mini="true" data-type="horizontal">
+						<legend>Select Entities</legend>
+						<input type="checkbox" id="idtablereport" name="idtablereport" onChange="$(this).val(this.checked? '1': '0');">	
+						<label for="idtablereport">Id Table</label>
+						<input type="checkbox" id="detailtablereport" name="detailtablereport" onChange="$(this).val (this.checked? '1': '0');">	
+						<label for="detailtablereport">Detail Table</label>
+						<input type="checkbox" id="addresstablereport" name="addresstablereport" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="addresstablereport">Address Table</label>
+						<input type="checkbox" id="educationtablereport" name="worktablereport" onChange="$(this).val(this.checked? '1': '0');">
+						<label for="educationtablereport">Education Table</label>
+						<input type="checkbox" id="worktablereport" name="worktablereport" onChange="$(this).val(this.checked? '1': '0');">		
+						<label for="worktablereport">Work Table</label>	
+					</fieldset>			
+				</div>
+				<input type="button" id="reportbutton" name="reportbutton" value="Submit" data-mini="true" data-icon="check">
+			</form>
+			<table data-role="table" class="ui-responsive ui-table">
+				<thead id="theadreport"></thead>
+				<tbody id="tbodyreport"></tbody>		
+			</table>
+		</div>
+	</div>
+</body>
+</html>

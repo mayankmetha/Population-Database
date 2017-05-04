@@ -1,0 +1,36 @@
+   __  ___                    __     __  ___    __  __          ___ 
+  /  |/  /__ ___ _____ ____  / /__  /  |/  /__ / /_/ /  ___ _  / _ \
+ / /|_/ / _ `/ // / _ `/ _ \/  '_/ / /|_/ / -_) __/ _ \/ _ `/ / // /
+/_/  /_/\_,_/\_, /\_,_/_//_/_/\_\ /_/  /_/\__/\__/_//_/\_,_/ /____/ 
+            /___/                                                   
+
+INSTALLATION
+0) For MySQL
+	user=root
+	password=root
+1) Install 
+	Windows:
+		MySQL workbench, apache(xampp), php7, firefox
+	Linux/UNIX:
+		MySQL-server, apache, php7 and related files
+2) Create Database
+	Windows:
+		a)Open createDB.sql in MySQL workbench
+		b)Run the file
+	Linux/UNIX:
+		Run in terminal "mysql -u root --password=root < createDB.sql" without the quotes
+3) Copy files
+	Windows:
+		Copy data folder content to www/html or equivalent root(localhost) folder of apache
+	Linux/UNIX:
+		Copy file to /var/www/html or equivalent root(localhost) folder of apache
+
+EXECUTION
+0) Open Firefox
+1) Enter the URL "localhost/connect.html" without the quotes
+ 
+REFERENCES FOR SETUP FILES
+PHP: 		http://php.net/
+APACHE:		http://httpd.apache.org/
+MYSQL:		http://www.mysql.com/
+FIREFOX:	https://www.mozilla.org/en-US/firefox/
